@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-
+import bgimg from "./assets/newng.jpg"
 const Landing: React.FC = () => {
   return (
     <div className="w-screen h-screen relative overflow-hidden text-white font-kodchasan">
@@ -10,7 +10,7 @@ const Landing: React.FC = () => {
         transition={{ duration: 2.5, ease: "easeInOut" }}
         className="absolute inset-0 bg-cover bg-center z-0"
         style={{
-          backgroundImage: `url("/assets/bg2.jpg")`,
+          backgroundImage: `url(${bgimg})`,
         }}
       />
 
