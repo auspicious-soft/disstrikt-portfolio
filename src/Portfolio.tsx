@@ -152,7 +152,7 @@ if (error || !portfolioData) {
             </div>
 
             <div>
-              <p className="text-xs font-light leading-tight mt-1">
+              <p className="text-sm font-light leading-tight mt-1">
                 {aboutMe || "-"}
               </p>
             </div>
@@ -164,7 +164,7 @@ if (error || !portfolioData) {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`w-40 p-2.5 rounded-[50px] flex justify-center items-center text-xs font-kodchasan transition-all duration-200 cursor-pointer ${
+              className={`w-40 p-2.5 rounded-[50px] flex justify-center items-center text-sm font-kodchasan transition-all duration-200 cursor-pointer ${
                 activeTab === tab ? "bg-rose-500 text-white" : "text-stone-200"
               }`}
             >

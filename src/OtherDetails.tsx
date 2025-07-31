@@ -15,7 +15,7 @@ const OtherDetailsTab: React.FC<OtherDetailsTabProps> = ({ instagramLink, youtub
   return (
     <div className="w-full inline-flex justify-start items-start gap-5">
       <div className="flex-1 inline-flex flex-col justify-start items-start gap-1.5">
-        <div className="self-stretch justify-start text-stone-200 text-xs font-light font-['Minork_Sans_']">
+        <div className="self-stretch justify-start text-stone-200 text-xm font-extrabold font-['Minork_Sans_']">
           View Profile On
         </div>
         <div className="self-stretch h-60 flex flex-col justify-start items-start gap-3.5">
@@ -40,11 +40,11 @@ const OtherDetailsTab: React.FC<OtherDetailsTabProps> = ({ instagramLink, youtub
         </div>
       </div>
       <div className="flex-1 inline-flex flex-col justify-start items-start gap-1.5">
-        <div className="self-stretch justify-start text-stone-200 text-xs font-light font-['Minork_Sans_']">
+        <div className="self-stretch justify-start text-stone-200 text-xm font-extrabold font-['Minork_Sans_']">
           Set Card
         </div>
         <img
-          className="w-full h-96 object-cover rounded-[10px]"
+          className="w-full h-96 object-contain rounded-[10px]"
           src={profileImage}
           alt="Profile Card"
         />
