@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #171717;
+    --foreground: #ededed;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #171717;
+      --foreground: #ededed;
+    }
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: 'Kodchasan', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .content-area {
+    background-color: var(--background);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+.bg-blur-glow {
+  position: absolute;
+  width: 916px;
+  height: 916px;
+  top: 54px;
+  left: 262px;
+  background-color: rgba(254, 202, 202, 0.2); /* Tailwind's rose-200/20 */
+  filter: blur(250px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+/* Font face declarations */
+@font-face {
+  font-family: 'Kodchasan';
+  src: url('./assets/fonts/Kodchasan-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Kodchasan';
+  src: url('./assets/fonts/Kodchasan-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Kodchasan';
+  src: url('./assets/fonts/Kodchasan-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Kodchasan';
+  src: url('./assets/fonts/Kodchasan-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Kodchasan';
+  src: url('./assets/fonts/Kodchasan-SemiBoldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Kodchasan';
+  src: url('./assets/fonts/Kodchasan-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Kodchasan';
+  src: url('./assets/fonts/Kodchasan-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Kodchasan';
+  src: url('./assets/fonts/Kodchasan-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Kodchasan';
+  src: url('./assets/fonts/Kodchasan-ExtraLightItalic.ttf') format('truetype');
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Kodchasan';
+  src: url('./assets/fonts/Kodchasan-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Kodchasan';
+  src: url('./assets/fonts/Kodchasan-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Minork Sans';
+  src: url('./assets/fonts/minorksans-extrabold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Minork Sans';
+  src: url('./assets/fonts/minorksans-extrabolditalic.otf') format('opentype');
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Minork Sans';
+  src: url('./assets/fonts/minorksans-light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Minork Sans';
+  src: url('./assets/fonts/minorksans-lightitalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+
+/* Hide time picker icon (Chrome, Edge, Opera) */
+input[type="time"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Optional: Firefox-specific (not needed in most cases) */
+input[type="time"] {
+  appearance: none;
+  -moz-appearance: textfield;
+}
+
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Remove native styles in Firefox */
+input[type="date"] {
+  appearance: none;
+  -moz-appearance: textfield;
+}
