@@ -55,7 +55,12 @@ const Portfolio: React.FC = () => {
           <OtherDetailsTab
             instagramLink={portfolioData.links?.find((l: any) => l.platform === "Instagram")?.url || ""}
             youtubeLink={portfolioData.links?.find((l: any) => l.platform === "Youtube")?.url || ""}
-            profileImage={portfolioData.setCards ? `https://disstrikt.s3.eu-north-1.amazonaws.com/${portfolioData.setCards[0]}` : ""}
+         profileImage={
+  portfolioData.setCards && portfolioData.setCards.length > 0 
+    ? `https://disstrikt.s3.eu-north-1.amazonaws.com/${portfolioData.setCards[0]}`
+    : ""
+}
+
           />
         );
       default:
@@ -139,11 +144,16 @@ const Portfolio: React.FC = () => {
               />
             </div>
 
-            <div>
-              <p className="text-xs sm:text-sm font-light leading-tight mt-1">
-                {aboutMe || "-"}
-              </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-10">
+          
+            {aboutMe &&
+              <UserInfo
+                label="About Me"
+                value={aboutMe || ""}
+              />
+            }
             </div>
+
           </div>
         </div>
 

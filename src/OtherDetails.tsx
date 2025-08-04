@@ -12,11 +12,11 @@ const OtherDetailsTab: React.FC<OtherDetailsTabProps> = ({ instagramLink, youtub
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  const isDummyImage = profileImage === "/assets/dummyUserImg.png";
+const renderImg = profileImage ? `https://disstrikt.s3.eu-north-1.amazonaws.com/${profileImage}`: '';
 
   return (
     <div className="w-full flex flex-col sm:flex-row justify-start items-start gap-5">
-      <div className={`flex-1 inline-flex flex-col justify-start items-start gap-1.5 w-full ${isDummyImage ? "w-full" : "sm:w-1/2"}`}>
+      <div className={`flex-1 inline-flex flex-col justify-start items-start gap-1.5 w-full ${profileImage ? "w-full" : "sm:w-1/2"}`}>
         <div className="self-stretch justify-start text-stone-200 text-xm font-extrabold font-['Minork_Sans_']">
           View Profile On
         </div>
@@ -41,7 +41,7 @@ const OtherDetailsTab: React.FC<OtherDetailsTabProps> = ({ instagramLink, youtub
           </button>
         </div>
       </div>
-      {!isDummyImage && (
+      {profileImage && (
         <div className="flex-1 sm:w-1/2 inline-flex flex-col justify-start items-start gap-1.5">
           <div className="self-stretch justify-start text-stone-200 text-xm font-extrabold font-['Minork_Sans_']">
             Set Card

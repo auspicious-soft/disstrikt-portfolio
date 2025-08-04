@@ -28,7 +28,7 @@ const ImagesTab: React.FC<ImagesTabProps> = ({ images }) => {
             <img
               src={`https://disstrikt.s3.eu-north-1.amazonaws.com/${img}`}
               alt={`Image ${idx}`}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-top"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "/assets/fallback-image.jpg";
               }}
