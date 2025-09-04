@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ImagesTab from "./ImageTab";
 import VideoTab from "./VideoTab";
 import OtherDetailsTab from "./OtherDetails";
@@ -6,7 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 import NotFound from "./404";
-
+import dummyyyy from "./assets/dummyUserImg.png"
 const TABS = ["Images", "Videos", "Other Details"];
 
 const dummyImg = "/assets/dummyUserImg.png";
@@ -41,6 +41,15 @@ const Portfolio: React.FC = () => {
       fetchPortfolio();
     }
   }, [id]);
+
+
+  
+   const imageSrc = useMemo(() => {
+    if (!portfolioData?.image) return null;
+    return portfolioData.image.startsWith("https://lh3")
+      ? portfolioData.image
+      : `https://disstrikt.s3.eu-north-1.amazonaws.com/${portfolioData.image}`;
+  }, [portfolioData?.image]);
 
   const renderTabContent = () => {
     if (!portfolioData) return null;
@@ -94,6 +103,7 @@ const Portfolio: React.FC = () => {
 
   const getDate = (iso: string) => new Date(iso).toLocaleDateString("en-GB");
 
+
   return (
     <div className="relative min-h-screen bg-neutral-900 overflow-hidden text-stone-200 font-kodchasan">
       <div className="absolute w-[clamp(300px,70vw,916px)] h-[clamp(300px,70vw,916px)] left-[clamp(50px,20vw,262px)] top-[54px] bg-rose-200/20 blur-[150px] sm:blur-[250px] pointer-events-none z-0" />
@@ -102,13 +112,13 @@ const Portfolio: React.FC = () => {
         <div className="font-bold text-2xl sm:text-3xl md:text-4xl">{fullName}</div>
 
         <div className="flex flex-col sm:flex-row gap-6 sm:gap-10">
-          {image && (
+          {imageSrc && (
             <img
-              src={`https://disstrikt.s3.eu-north-1.amazonaws.com/${image}`}
+              src={imageSrc}
               alt="User"
               className="w-full sm:w-[307px] h-[434px] object-cover rounded-[20px]"
               onError={(e) => {
-                (e.target as HTMLImageElement).src = dummyImg;
+                (e.target as HTMLImageElement).src = dummyyyy;
               }}
             />
           )}
