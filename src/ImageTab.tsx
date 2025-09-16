@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Masonry from "react-masonry-css";
 
 interface ImagesTabProps {
   images: string[];
@@ -16,26 +17,39 @@ const ImagesTab: React.FC<ImagesTabProps> = ({ images }) => {
     setSelectedImage(null);
   };
 
+  const breakpointColumnsObj = {
+    default: 5, // large screens
+    1000: 4,    // ≥1280px
+    704: 3,    // ≥1024px
+    400: 2,
+    300:1,     // ≥640px
+  }
+
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4 w-full">
+     <Masonry
+        breakpointCols={breakpointColumnsObj}
+        className="-ml-4 flex w-auto" // fix horizontal gaps
+        columnClassName="pl-4 space-y-4" // fix vertical gaps
+      >
         {images.map((img, idx) => (
           <div
             key={idx}
-            className="w-full aspect-[1/1] rounded-[10px] overflow-hidden cursor-pointer"
+            className="rounded-[10px] overflow-hidden cursor-pointer"
             onClick={() => openModal(img)}
           >
             <img
               src={`https://disstrikt.s3.eu-north-1.amazonaws.com/${img}`}
               alt={`Image ${idx}`}
-              className="w-full h-full object-cover object-top"
+              className="w-full rounded-[10px] object-cover"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "/assets/fallback-image.jpg";
               }}
             />
           </div>
         ))}
-      </div>
+      </Masonry>
+
 
       <AnimatePresence>
         {selectedImage && (
