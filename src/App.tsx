@@ -1,23 +1,28 @@
-  import React from "react";
-  import { Routes, Route, useLocation } from "react-router-dom";
-  import Portfolio from "./Portfolio";
+import React from "react";
+import {
+  Routes,
+  Route
+} from "react-router-dom";
+import Portfolio from "./Portfolio";
 import Landing from "./Landing";
+import Register from "./Register";
+import Otp from "./Otp";
+import Subscription from "./Subscription";
+import Login from "./Login";
 
-
-  function App() {
-
-    return (
-      <div className="min-h-screen">
+function App() {
+  return (
+    <div className="min-h-screen">
         <Routes>
+          {/* <Route path="/" element={<Landing />} /> */}
+          <Route path="/" element={<Login />} />
           <Route path="/portfolio/:id" element={<Portfolio />} />
-          <Route path="/" element={<Landing />} />
-
+          <Route path="/register" element={<Register />} />
+          <Route path='/verify-otp' element={<Otp/>}/>
+          <Route path="/subscription" element={<Subscription/>}/>
         </Routes>
-      </div>
-    );
-  }
+    </div>
+  );
+}
 
-  export default App;
-
-
-
+export default App;

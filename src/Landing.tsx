@@ -34,6 +34,16 @@ const Landing: React.FC = () => {
         >
           Discover creativity, passion, and professionalism all in one place.
         </motion.p>
+        <motion.p
+          initial={{ x: -60, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 2, ease: "easeOut", delay: 1.2 }}
+          className="text-lg max-w-xl cursor-pointer text-rose-400 underline mt-4"
+          onClick={() => { window.location.href = "/register"; }}
+        >
+          Click Here to Register now and unlock exclusive benefits!
+        </motion.p>
+
       </div>
     </div>
   );

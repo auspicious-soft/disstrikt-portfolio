@@ -2,14 +2,12 @@ import React, { useState, useEffect, useMemo } from "react";
 import ImagesTab from "./ImageTab";
 import VideoTab from "./VideoTab";
 import OtherDetailsTab from "./OtherDetails";
-import { useParams, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import NotFound from "./404";
 import dummyyyy from "./assets/dummyUserImg.png"
 const TABS = ["Images", "Videos", "Other Details"];
 
-const dummyImg = "/assets/dummyUserImg.png";
 
 const Portfolio: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,8 +15,6 @@ const Portfolio: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [portfolioData, setPortfolioData] = useState<any>(null);
-  const navigate = useNavigate();
-
   useEffect(() => {
     const fetchPortfolio = async () => {
       setLoading(true);
@@ -92,7 +88,6 @@ const Portfolio: React.FC = () => {
   const {
     fullName,
     email,
-    phone,
     gender,
     measurements,
     dob,
