@@ -207,13 +207,27 @@ const Subscription = () => {
                   className="bg-rose-200/10 relative backdrop-blur-sm rounded-xl p-5 border border-rose-200/20 hover:border-rose-300/40 transition-all cursor-pointer"
                   onClick={() => handlePlanSelect(plan)}
                 >
+                   {/* <div className="w-full h-full rounded-xl bg-rose-200/10"> */}
+                    {planId === plan._id && subscriptionStatus === "active" ? (
+                      <span className="absolute top-[-10px] right-[-5px] z-10 bg-rose-400 text-white text-xs font-semibold py-1 px-2 rounded">
+                        Active
+                      </span>
+                    ): subscriptionStatus === "trialing" && planId === plan._id ? ( <span className="absolute top-[-10px] right-[-5px] z-10 bg-rose-400 text-white text-xs font-semibold py-1 px-2 rounded">
+                        Trialing
+                      </span>
+                    ) : subscriptionStatus === "canceling" && planId === plan._id ? ( <span className="absolute top-[-10px] right-[-5px] z-10 bg-yellow-400 text-white text-xs font-semibold py-1 px-2 rounded">
+                        Canceling
+                      </span> ) : null}
+                    {/* </div> */}
                   {/* Rose ring when selected or subscribed */}
                   <div
                     className={`absolute inset-0 rounded-xl transition-all ${
                       selectedPlan === plan._id ? "ring-2 ring-rose-400" : ""
                     }`}
                   />
-                  <div className="flex justify-between items-start mb-3">
+                  
+                  <div className="flex relative justify-between items-start mb-3">
+                   
                     <h3 className="text-rose-400 font-bold text-lg">
                       {plan.name}
                     </h3>
