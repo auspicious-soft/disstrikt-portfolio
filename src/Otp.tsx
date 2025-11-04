@@ -51,10 +51,10 @@ const Otp = () => {
         language: queryParams.get("lang") || "en",
       });
       if (response.status === 200) {
-        alert("OTP verified successfully!");
-        const token = response.data.data.token;
-        localStorage.setItem("authToken", token);
-        navigate(`/subscription?lang=${queryParams.get("lang")}&country=${country}`);
+        alert("Redirecting to login page...");
+        setTimeout(()=>{
+          navigate(`/`);
+        }, 500);
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);

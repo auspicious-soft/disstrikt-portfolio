@@ -32,10 +32,18 @@ const Login = () => {
         const token = response.data.data.token;
         const lang = response.data.data.language;
         const country = response.data.data.country;
+        const subscriptionStatus = response.data.data.subscription;
+        const planId = response.data.data.planId;
+        const userType = response.data.data.userType;
+        if(userType !== "web") {
+          alert("Only web users can log in here.");
+          setLoading(false);
+          return;
+        }
         console.log('token:', token);
         localStorage.setItem("authToken", token);
         alert("Logged In successfully!");
-        navigate(`/subscription?lang=${lang}&country=${country}`);
+        navigate(`/subscription?lang=${lang}&country=${country}&subscriptionStatus=${subscriptionStatus === null ? "nosubscription" : subscriptionStatus}&planId=${planId}`);
       }
     } catch (err) {
       console.error("Error submitting form:", err);
