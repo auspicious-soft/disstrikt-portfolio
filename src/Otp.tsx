@@ -59,6 +59,9 @@ const Otp = () => {
     } catch (error) {
       console.error("Error verifying OTP:", error);
       alert(error.response?.data?.message || "OTP verification failed.");
+    }finally{
+      setOtp(["", "", "", "", "", ""]);
+      inputRefs.current[0]?.focus();
     }
   };
 
