@@ -212,7 +212,7 @@ const Register = () => {
                   value={formData.countryCode}
                   onChange={handleChange}
                   required
-                  className="w-1/3 px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
+                  className="w-1/3 px-4 py-2 rounded-lg cursor-pointer bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
                 >
                   <option value="">Code</option>
                   {countryCodeOptions.map((opt) => (
@@ -237,7 +237,7 @@ const Register = () => {
                 value={formData.country}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
+                className="w-full px-4 py-2 rounded-lg cursor-pointer bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
               >
                 <option value="">Select Country</option>
                 {countryOptions.map((opt) => (
@@ -251,7 +251,7 @@ const Register = () => {
                 value={formData.language}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
+                className="w-full px-4 py-2 cursor-pointer rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
               >
                 <option value="">Select Language</option>
                 {languageOptions.map((opt) => (
@@ -277,6 +277,14 @@ const Register = () => {
               {loading ? "Registering..." : "Register"}
             </motion.button>
           </motion.form>
+          <motion.p 
+            className="text-zinc-400 text-center text-sm mt-4"
+          >
+            Already have an account?{" "}
+            <a href="/login" className="text-rose-500 hover:underline">
+              Login here
+            </a>
+          </motion.p>  
         </div>
       </motion.div>
     </div>
