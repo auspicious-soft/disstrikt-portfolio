@@ -223,7 +223,7 @@ const Register = () => {
                 </select>
 
                 <input
-                  type="tel"
+                  type="number"
                   name="phone"
                   placeholder="Phone Number"
                   value={formData.phone}
@@ -281,7 +281,7 @@ const Register = () => {
             className="text-zinc-400 text-center text-sm mt-4"
           >
             Already have an account?{" "}
-            <a href="/login" className="text-rose-500 hover:underline">
+            <a href="/" className="text-rose-500 hover:underline">
               Login here
             </a>
           </motion.p>  
