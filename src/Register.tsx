@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { motion } from "framer-motion"; 
+import { motion } from "framer-motion";
 import logo from "./assets/Logo (Name) 1.svg";
 import LoginImg from "./assets/pexels-nerdcinema-19306017.png";
 import { allCountries } from "country-telephone-data";
@@ -31,12 +31,21 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const payload = { ...formData, userType: "web", fcmToken: "some_fcm_token" };
-      const response = await axios.post("https://api.disstrikt.uk/api/register", payload);
+      const payload = {
+        ...formData,
+        userType: "web",
+        fcmToken: "some_fcm_token",
+      };
+      const response = await axios.post(
+        "https://api.disstrikt.uk/api/register",
+        payload
+      );
       if (response.status === 201) {
         alert("Form submitted successfully!");
         const encodedEmail = encodeURIComponent(formData.email);
-        navigate(`/verify-otp?email=${encodedEmail}&lang=${formData.language}&country=${formData.country}`);
+        navigate(
+          `/verify-otp?email=${encodedEmail}&lang=${formData.language}&country=${formData.country}`
+        );
       }
     } catch (err) {
       console.error("Error submitting form:", err);
@@ -108,7 +117,11 @@ const Register = () => {
 
   const slideIn = {
     hidden: { opacity: 0, x: 50 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: "easeOut" } },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.7, ease: "easeOut" },
+    },
   };
 
   return (
@@ -207,20 +220,37 @@ const Register = () => {
                 </div>
               </div>,
               <div className="flex gap-1">
-                <select
-                  name="countryCode"
-                  value={formData.countryCode}
-                  onChange={handleChange}
-                  required
-                  className="w-1/3 px-4 py-2 rounded-lg cursor-pointer bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
-                >
-                  <option value="">Code</option>
-                  {countryCodeOptions.map((opt) => (
-                    <option key={opt.iso2} value={opt.dialCode}>
-                      ({opt.dialCode})
-                    </option>
-                  ))}
-                </select>
+                <div className="relative w-1/3">
+                  <select
+                    name="countryCode"
+                    value={formData.countryCode}
+                    onChange={handleChange}
+                    required
+                    className="appearance-none w-full px-4 py-2 rounded-lg cursor-pointer bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400 pr-10"
+                  >
+                    <option value="">Code</option>
+                    {countryCodeOptions.map((opt) => (
+                      <option key={opt.iso2} value={opt.dialCode}>
+                        ({opt.dialCode})
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* Custom dropdown arrow */}
+                  <svg
+                    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </div>
 
                 <input
                   type="number"
@@ -232,34 +262,68 @@ const Register = () => {
                   className="w-2/3 px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
                 />
               </div>,
-              <select
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 rounded-lg cursor-pointer bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
-              >
-                <option value="">Select Country</option>
-                {countryOptions.map((opt) => (
-                  <option key={opt.code} value={opt.code}>
-                    {opt.name}
-                  </option>
-                ))}
-              </select>,
-              <select
-                name="language"
-                value={formData.language}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 cursor-pointer rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
-              >
-                <option value="">Select Language</option>
-                {languageOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>,
+              <div className="relative w-full">
+                <select
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  required
+                  className="appearance-none w-full px-4 py-2 pr-10 rounded-lg cursor-pointer bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
+                >
+                  <option value="">Select Country</option>
+                  {countryOptions.map((opt) => (
+                    <option key={opt.code} value={opt.code}>
+                      {opt.name}
+                    </option>
+                  ))}
+                </select>
+
+                {/* Custom dropdown arrow */}
+                <svg
+                  className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>,
+              <div className="relative w-full">
+                <select
+                  name="language"
+                  value={formData.language}
+                  onChange={handleChange}
+                  required
+                  className="appearance-none w-full px-4 py-2 pr-10 cursor-pointer rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
+                >
+                  <option value="">Select Language</option>
+                  {languageOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+
+                {/* Custom dropdown arrow */}
+                <svg
+                  className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>,
             ].map((field, i) => (
               <motion.div key={i} custom={i} variants={fadeUp}>
                 {field}
@@ -277,14 +341,12 @@ const Register = () => {
               {loading ? "Registering..." : "Register"}
             </motion.button>
           </motion.form>
-          <motion.p 
-            className="text-zinc-400 text-center text-sm mt-4"
-          >
+          <motion.p className="text-zinc-400 text-center text-sm mt-4">
             Already have an account?{" "}
             <a href="/" className="text-rose-500 hover:underline">
               Login here
             </a>
-          </motion.p>  
+          </motion.p>
         </div>
       </motion.div>
     </div>

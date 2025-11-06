@@ -117,6 +117,11 @@ const Subscription = () => {
       console.error("Error upgrading subscription:", error);
     }
   };
+    const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/"); // redirect to homepage or login page
+  };
+
 
   return (
     <div className="w-full h-screen bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center">
@@ -185,9 +190,16 @@ const Subscription = () => {
           className="flex-1 flex flex-col gap-5 px-6 sm:px-8 py-10 w-full h-screen overflow-y-auto scrollbar-hide"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          <div className="w-full flex justify-start">
-            <img src={logo} alt="logo" className="w-28 h-16" />
-          </div>
+        <div className="w-full sticky flex justify-between items-center">
+  <img src={logo} alt="logo" className="w-28 h-16" />
+  
+  <button
+    onClick={handleLogout}
+    className="bg-white/10 hover:bg-white/20 text-rose-300 border border-rose-300/30 rounded-lg px-4 py-2 text-sm font-medium transition-all"
+  >
+    Logout
+  </button>
+</div>
 
           <div className="flex flex-col gap-2">
             <h1 className="text-3xl font-bold text-stone-200 mb-4">
