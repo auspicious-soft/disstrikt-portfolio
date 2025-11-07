@@ -47,6 +47,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/verify-otp" element={<Otp />} />
         <Route path="/subscription/:authToken" element={<ProtectedSubscription />} /> {/* ✅ Protected */}
+         <Route path="/subscription" element={<ProtectedSubscription />} /> {/* ✅ Protected */}
+
       </Routes>
     </div>
   );

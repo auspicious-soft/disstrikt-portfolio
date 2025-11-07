@@ -9,7 +9,9 @@ function withAuthProtection<P extends object>(
     const token = localStorage.getItem("authToken");
     const { authToken } = useParams<{ authToken: string }>();
     // Redirect if not authenticated
-
+    if(authToken){
+      localStorage.setItem("authToken", authToken);
+    }
     if (!token && !authToken) {
       return <Navigate to="/" replace />;
     }
