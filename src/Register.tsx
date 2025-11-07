@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
@@ -55,13 +56,27 @@ const Register = () => {
     };
   }, [showDropdown]);
 
+  const validatePassword = (password) => {
+    const lengthValid = password.length > 6;
+    const upperValid = /[A-Z]/.test(password);
+    const specialValid = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+    return lengthValid && upperValid && specialValid;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === "password") {
+      setIsPasswordValid(validatePassword(value));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isPasswordValid) {
+      toast.error("Password must be at least 8 characters long, contain one uppercase letter, and one special character.");
+      return;
+    }
     setLoading(true);
     try {
       const payload = {
@@ -241,23 +256,35 @@ const Register = () => {
                 required
                 className="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
               />,
-              <div className="relative w-full">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400 pr-12"
-                />
-                <div
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-200 cursor-pointer"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              <>
+                <div className="relative w-full">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400 pr-12"
+                  />
+                  <div
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-200 cursor-pointer"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </div>
                 </div>
-              </div>,
+             {formData.password && !isPasswordValid && (
+  <p className="mt-2 text-sm text-red-400">
+    Password must be at least 8 characters long, contain one uppercase letter, and one special character.
+  </p>
+)}
+
+{formData.password && isPasswordValid && (
+  <p className="mt-2 text-sm text-green-400">Strong password</p>
+)}
+
+              </>,
               <div className="flex gap-1">
                 <div className="relative w-1/3" ref={dropdownRef} onBlur={closeDropdown}>
                   <div
@@ -409,10 +436,10 @@ const Register = () => {
             {/* Submit */}
             <motion.button
               type="submit"
-              disabled={loading}
+              disabled={loading || !isPasswordValid}
               variants={fadeUp}
-              custom={7}
-              className="w-full bg-rose-500 hover:bg-rose-600 text-white font-semibold py-2 rounded-lg transition-all duration-200"
+              custom={6}
+              className="w-full bg-rose-500 hover:bg-rose-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2 rounded-lg transition-all duration-200"
             >
               {loading ? "Registering..." : "Register"}
             </motion.button>

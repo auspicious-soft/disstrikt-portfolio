@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const Loader = () => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900 bg-opacity-30 backdrop-blur-2xl">
+    <div className="fixed inset-0 z-50 flex items-center  bg-rose-200 justify-center bg-opacity-30 backdrop-blur-lg">
       <motion.div
         className="relative"
         animate={{ rotate: 360 }}

@@ -85,119 +85,119 @@ const Login = () => {
 
   return (
     <>
-    {loading ? <Loader/> : 
-    <div className="w-full h-[100dvh] bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center px-4">
-      {/* Blurred glow background */}
-      <div className="absolute w-[700px] sm:w-[916px] h-[700px] sm:h-[916px] left-1/2 top-[54px] -translate-x-1/2 bg-rose-200/20 blur-[250px]" />
+      <div className="w-full h-[100dvh] bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center px-4">
+        {/* Blurred glow background */}
+        <div className="absolute w-[700px] sm:w-[916px] h-[700px] sm:h-[916px] left-1/2 top-[54px] -translate-x-1/2 bg-rose-200/20 blur-[250px]" />
 
-      <motion.div
-        className="relative z-10 flex w-full max-w-6xl bg-transparent rounded-xl overflow-hidden flex-col md:flex-row-reverse h-auto md:h-[630px] md:p-6 gap-y-10 md:gap-x-16"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {/* Left side: Image */}
         <motion.div
-          className="hidden md:flex flex-1 relative w-full h-auto overflow-hidden rounded-xl"
-          variants={slideIn}
+          className="relative z-10 flex w-full max-w-6xl bg-transparent rounded-xl overflow-hidden flex-col md:flex-row-reverse h-auto md:h-[630px] md:p-6 gap-y-10 md:gap-x-16"
+          variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          <img
-            src={LoginImg}
-            alt="Illustration"
-            className="object-contain w-full h-full rounded-xl"
-          />
-        </motion.div>
-
-        {/* Right side: Register form */}
-        <div className="flex-1 flex flex-col justify-center gap-5 px-6 sm:px-8 py-10 w-full">
-          {/* Logo */}
+          {/* Left side: Image */}
           <motion.div
-            className="w-full flex justify-start"
-            variants={fadeDown}
+            className="hidden md:flex flex-1 relative w-full h-auto overflow-hidden rounded-xl"
+            variants={slideIn}
             initial="hidden"
             animate="visible"
           >
-            <img src={logo} alt="logo" className="w-28 h-16 transition-all" />
+            <img
+              src={LoginImg}
+              alt="Illustration"
+              className="object-contain w-full h-full rounded-xl"
+            />
           </motion.div>
 
-          {/* Heading */}
-          <motion.div
-            className="flex flex-col gap-2"
-            variants={fadeDown}
-            initial="hidden"
-            animate="visible"
-          >
-            <h1 className="text-stone-200 text-3xl font-extrabold capitalize">
-              Login to Your Account
-            </h1>
-            <p className="text-zinc-400 text-base font-normal">
-              Fill in your details to login to your account.
-            </p>
-          </motion.div>
+          {/* Right side: Register form */}
+          <div className="flex-1 flex flex-col justify-center gap-5 px-6 sm:px-8 py-10 w-full">
+            {/* Logo */}
+            <motion.div
+              className="w-full flex justify-start"
+              variants={fadeDown}
+              initial="hidden"
+              animate="visible"
+            >
+              <img src={logo} alt="logo" className="w-28 h-16 transition-all" />
+            </motion.div>
 
-          {/* Form */}
-          <motion.form
-            onSubmit={handleSubmit}
-            className="flex flex-col gap-4"
-            initial="hidden"
-            animate="visible"
-          >
-            {[
-              <input
-                type="email"
-                name="email"
-                placeholder="Email Address"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
-              />,
-              <div className="relative w-full">
+            {/* Heading */}
+            <motion.div
+              className="flex flex-col gap-2"
+              variants={fadeDown}
+              initial="hidden"
+              animate="visible"
+            >
+              <h1 className="text-stone-200 text-3xl font-extrabold capitalize">
+                Login to Your Account
+              </h1>
+              <p className="text-zinc-400 text-base font-normal">
+                Fill in your details to login to your account.
+              </p>
+            </motion.div>
+
+            {/* Form */}
+            <motion.form
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-4"
+              initial="hidden"
+              animate="visible"
+            >
+              {[
                 <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Password"
-                  value={formData.password}
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400 pr-12"
-                />
-                <div
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-200 cursor-pointer"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  className="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400"
+                />,
+                <div className="relative w-full">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400 pr-12"
+                  />
+                  <div
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-200 cursor-pointer"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </div>
                 </div>
-              </div>
-            ].map((field, i) => (
-              <motion.div key={i} custom={i} variants={fadeUp}>
-                {field}
-              </motion.div>
-            ))}
+              ].map((field, i) => (
+                <motion.div key={i} custom={i} variants={fadeUp}>
+                  {field}
+                </motion.div>
+              ))}
 
-            {/* Submit */}
-            <motion.button
-              type="submit"
-              disabled={loading}
-              variants={fadeUp}
-              custom={7}
-              className="w-full bg-rose-500 hover:bg-rose-600 text-white font-semibold py-2 rounded-lg transition-all duration-200"
-            >
-              {loading ? "Logging in..." : "Login"}
-            </motion.button>
-          </motion.form>
-          <p className="text-zinc-400 text-center text-sm mt-4">
-            Don't have an account?{" "}
-            <a href="/register" className="text-rose-500 hover:underline">
-              Register here
-            </a>
-          </p>  
-        </div>
-      </motion.div>
-    </div>
-}
+              {/* Submit */}
+              <motion.button
+                type="submit"
+                disabled={loading}
+                variants={fadeUp}
+                custom={7}
+                className="w-full bg-rose-500 hover:bg-rose-600 text-white font-semibold py-2 rounded-lg transition-all duration-200"
+              >
+                {loading ? "Logging in..." : "Login"}
+              </motion.button>
+            </motion.form>
+            <p className="text-zinc-400 text-center text-sm mt-4">
+              Don't have an account?{" "}
+              <a href="/register" className="text-rose-500 hover:underline">
+                Register here
+              </a>
+            </p>  
+          </div>
+        </motion.div>
+      </div>
+
+      {loading && <Loader />}
     </>
   );
 };

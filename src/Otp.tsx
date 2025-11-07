@@ -5,6 +5,7 @@ import logo from "./assets/Logo (Name) 1.svg";
 import LoginImg from "./assets/pexels-nerdcinema-19306017.png";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Loader from "./utils/Loader";
 
 const Otp = () => {
   const location = useLocation();
@@ -119,6 +120,7 @@ const Otp = () => {
   };
 
   return (
+    <>
     <div className="w-full h-[100dvh] bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center px-4 sm:px-6">
       {/* Glow background */}
       <div className="absolute w-[600px] sm:w-[800px] md:w-[916px] h-[600px] sm:h-[800px] md:h-[916px] left-1/2 top-[54px] -translate-x-1/2 bg-rose-200/20 blur-[250px]" />
@@ -223,6 +225,9 @@ const Otp = () => {
         </div>
       </motion.div>
     </div>
+          {loading && <Loader />}
+
+    </>
   );
 };
 
