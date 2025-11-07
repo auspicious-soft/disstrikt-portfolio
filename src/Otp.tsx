@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 const Otp = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
+    const [loading, setLoading] = useState(false);
   const email = queryParams.get("email");
   const country = queryParams.get("country");
   const navigate = useNavigate();
@@ -44,6 +45,8 @@ const Otp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+        setLoading(true);
+
     try {
       const enteredOtp = otp.join("");
       const response = await axios.post("https://api.disstrikt.uk/api/verify-otp", {
@@ -65,10 +68,14 @@ const Otp = () => {
     }finally{
       setOtp(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
+          setLoading(false);
+
     }
   };
 
   const handleResendOtp = async () => {
+        setLoading(true);
+
     try {
       const response = await axios.post("https://api.disstrikt.uk/api/resend-otp", {
         value: email,
@@ -81,6 +88,9 @@ const Otp = () => {
     } catch (error) {
       console.error("Error resending OTP:", error);
       toast.error(error.response?.data?.message || "Failed to resend OTP.");
+    }
+    finally{
+          setLoading(false);
     }
   };
 
@@ -109,7 +119,7 @@ const Otp = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center px-4 sm:px-6">
+    <div className="w-full h-[100dvh] bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center px-4 sm:px-6">
       {/* Glow background */}
       <div className="absolute w-[600px] sm:w-[800px] md:w-[916px] h-[600px] sm:h-[800px] md:h-[916px] left-1/2 top-[54px] -translate-x-1/2 bg-rose-200/20 blur-[250px]" />
 

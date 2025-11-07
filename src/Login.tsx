@@ -8,6 +8,7 @@ import { languages, countries } from "./utils/utils";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import Loader from "./utils/Loader";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -83,7 +84,9 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center px-4">
+    <>
+    {loading ? <Loader/> : 
+    <div className="w-full h-[100dvh] bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center px-4">
       {/* Blurred glow background */}
       <div className="absolute w-[700px] sm:w-[916px] h-[700px] sm:h-[916px] left-1/2 top-[54px] -translate-x-1/2 bg-rose-200/20 blur-[250px]" />
 
@@ -194,6 +197,8 @@ const Login = () => {
         </div>
       </motion.div>
     </div>
+}
+    </>
   );
 };
 
