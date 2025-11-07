@@ -129,11 +129,12 @@ const Subscription = () => {
   };
 
   return (
-    <div className="w-full h-screen bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center">
+    <div className="w-full min-h-screen bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center px-4 py-8">
       <div className="absolute w-[916px] h-[916px] left-1/2 top-[54px] -translate-x-1/2 bg-rose-200/20 blur-[250px]" />
 
-      <div className="relative z-10 flex w-full max-w-6xl bg-transparent rounded-xl overflow-hidden flex-col md:flex-row-reverse h-full md:h-[650px] md:p-6 gap-x-16">
-        <div className="hidden md:flex flex-1 relative w-full h-full overflow-hidden rounded-xl bg-gradient-to-br from-rose-200/10 via-neutral-800 to-neutral-900 flex-col justify-center items-center p-8 gap-6">
+      <div className="relative z-10 flex w-full max-w-7xl bg-transparent rounded-xl overflow-hidden flex-col-reverse lg:flex-row-reverse h-auto lg:p-6 gap-6">
+        {/* Mobile App Section */}
+        <div className="w-full lg:w-2/5 relative overflow-hidden rounded-xl lg:bg-gradient-to-br lg:from-rose-200/10 lg:via-neutral-800 lg:to-neutral-900 flex flex-col justify-center items-center p-8 gap-6">
         
           <div className="text-center mt-6">
             <h2 className="text-2xl font-semibold text-rose-300 mb-2">
@@ -183,12 +184,18 @@ const Subscription = () => {
           </div>
         </div>
 
-        {/* ✅ LEFT SIDE (dynamic buttons + plan selection) */}
+        {/* Plans Section - Now takes more width */}
         <div
-          className="flex-1 flex flex-col gap-5 px-6 sm:px-8 py-10 w-full h-screen overflow-y-auto scrollbar-hide"
+          className="w-full lg:w-3/5 flex flex-col gap-5 px-6 sm:px-8 py-10 max-h-[calc(100vh-4rem)] overflow-y-auto scrollbar-hide"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          <div className="w-full sticky flex justify-between items-center">
+          <style jsx>{`
+            div::-webkit-scrollbar {
+              display: none;
+            }
+          `}</style>
+          
+          <div className="w-full flex justify-between items-center">
             <img src={logo} alt="logo" className="w-28 h-16" />
 
             <button
@@ -217,7 +224,6 @@ const Subscription = () => {
                   className="bg-rose-200/10 relative backdrop-blur-sm rounded-xl p-5 border border-rose-200/20 hover:border-rose-300/40 transition-all cursor-pointer"
                   onClick={() => handlePlanSelect(plan)}
                 >
-                  {/* <div className="w-full h-full rounded-xl bg-rose-200/10"> */}
                   {planId === plan._id && subscriptionStatus === "active" ? (
                     <span className="absolute top-[-10px] right-[-5px] z-10 bg-rose-400 text-white text-xs font-semibold py-1 px-2 rounded">
                       Active
@@ -233,7 +239,7 @@ const Subscription = () => {
                       Canceling
                     </span>
                   ) : null}
-                  {/* </div> */}
+
                   {/* Rose ring when selected or subscribed */}
                   <div
                     className={`absolute inset-0 rounded-xl transition-all ${
@@ -286,7 +292,7 @@ const Subscription = () => {
             )}
           </div>
 
-          {/* ✅ Dynamic Buttons */}
+          {/* Dynamic Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mt-6">
             {subscriptionStatus === "trialing" && (
               <>

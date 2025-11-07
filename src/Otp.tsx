@@ -52,9 +52,11 @@ const Otp = () => {
         language: queryParams.get("lang") || "en",
       });
       if (response.status === 200) {
-        toast.success("Redirecting to login page...");
+        toast.success("Registered Successfully!");
+        const token = response.data.data.token;
+        localStorage.setItem("authToken", token);
         setTimeout(()=>{
-          navigate(`/`);
+          navigate(`/subscription`);
         }, 500);
       }
     } catch (error) {
