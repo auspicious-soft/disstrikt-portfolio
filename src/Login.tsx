@@ -83,7 +83,7 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full min-h-[100dvh] bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center px-4">
+    <div className="w-full min-h-screen bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center px-4">
       {/* Blurred glow background */}
       <div className="absolute w-[700px] sm:w-[916px] h-[700px] sm:h-[916px] left-1/2 top-[54px] -translate-x-1/2 bg-rose-200/20 blur-[250px]" />
 

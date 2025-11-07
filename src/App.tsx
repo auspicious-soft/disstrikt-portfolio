@@ -14,7 +14,7 @@ const ProtectedSubscription = withAuthProtection(Subscription);
 
 function App() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-[100dvh]">
       {/* ✅ Global Toast Container */}
       <Toaster
         position="top-center"
