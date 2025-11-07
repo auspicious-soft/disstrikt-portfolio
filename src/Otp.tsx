@@ -52,7 +52,7 @@ const Otp = () => {
         language: queryParams.get("lang") || "en",
       });
       if (response.status === 200) {
-        toast.success("Registered Successfully!");
+        toast.success("OTP verified successfully!");
         const token = response.data.data.token;
         localStorage.setItem("authToken", token);
         setTimeout(()=>{

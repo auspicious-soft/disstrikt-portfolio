@@ -129,12 +129,12 @@ const Subscription = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center px-4 py-8">
+    <div className="w-full min-h-screen bg-neutral-900 relative overflow-hidden font-body flex justify-center items-start px-4 py-8">
       <div className="absolute w-[916px] h-[916px] left-1/2 top-[54px] -translate-x-1/2 bg-rose-200/20 blur-[250px]" />
 
-      <div className="relative z-10 flex w-full max-w-7xl bg-transparent rounded-xl overflow-hidden flex-col-reverse lg:flex-row-reverse h-auto lg:p-6 gap-6">
+      <div className="relative z-10 flex w-full max-w-7xl bg-transparent rounded-xl overflow-hidden flex-col-reverse lg:flex-row-reverse h-auto lg:p-6 lg:gap-6 gap-0">
         {/* Mobile App Section */}
-        <div className="w-full lg:w-2/5 relative overflow-hidden rounded-xl lg:bg-gradient-to-br lg:from-rose-200/10 lg:via-neutral-800 lg:to-neutral-900 flex flex-col justify-center items-center p-8 gap-6">
+        <div className="w-full lg:w-2/5 relative overflow-hidden rounded-xl lg:bg-gradient-to-br lg:from-rose-200/10 lg:via-neutral-800 lg:to-neutral-900 flex flex-col justify-center items-center lg:p-8 p-0 gap-6">
         
           <div className="text-center mt-6">
             <h2 className="text-2xl font-semibold text-rose-300 mb-2">
@@ -186,7 +186,7 @@ const Subscription = () => {
 
         {/* Plans Section - Now takes more width */}
         <div
-          className="w-full lg:w-3/5 flex flex-col gap-5 px-6 sm:px-8 py-10 max-h-[calc(100vh-4rem)] overflow-y-auto scrollbar-hide"
+          className="w-full lg:w-3/5 flex flex-col gap-5 px-6 sm:px-8 py-10 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto scrollbar-hide"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           <style jsx>{`
@@ -332,7 +332,7 @@ const Subscription = () => {
               </>
             )}
 
-            {subscriptionStatus === "nosubscription" && (
+            {!subscriptionStatus && (
               <button
                 disabled={!selectedPlan}
                 onClick={handleTrialStart}

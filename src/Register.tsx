@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
 import logo from "./assets/Logo (Name) 1.svg";
@@ -22,8 +22,39 @@ const Register = () => {
     country: "",
     language: "",
   });
-const [showDropdown, setShowDropdown] = useState(false);
-const [searchTerm, setSearchTerm] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const dropdownRef = useRef(null);
+
+  const closeDropdown = () => {
+    setShowDropdown(false);
+    setSearchTerm("");
+  };
+
+  const toggleDropdown = () => {
+    if (showDropdown) {
+      closeDropdown();
+    } else {
+      setShowDropdown(true);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        closeDropdown();
+      }
+    };
+
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -43,7 +74,7 @@ const [searchTerm, setSearchTerm] = useState("");
         payload
       );
       if (response.status === 201) {
-        toast.success("Form submitted successfully!");
+        toast.success("Registered Successfully!");
         const encodedEmail = encodeURIComponent(formData.email);
         navigate(
           `/verify-otp?email=${encodedEmail}&lang=${formData.language}&country=${formData.country}`
@@ -64,10 +95,10 @@ const [searchTerm, setSearchTerm] = useState("");
   }));
 
   const filteredOptions = countryCodeOptions.filter(
-  (opt) =>
-    opt.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    opt.dialCode.includes(searchTerm)
-);
+    (opt) =>
+      opt.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      opt.dialCode.includes(searchTerm)
+  );
 
   const countryOptions = countries.map((code) => ({
     name:
@@ -228,71 +259,74 @@ const [searchTerm, setSearchTerm] = useState("");
                 </div>
               </div>,
               <div className="flex gap-1">
-              <div className="relative w-1/3" onBlur={() => setShowDropdown(false)}>
-  <div
-    onClick={() => setShowDropdown((prev) => !prev)}
-    className="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400 cursor-pointer flex justify-between items-center"
-  >
-    {formData.countryCode ? (
-      <span>{formData.countryCode}</span>
-    ) : (
-      <span className="text-zinc-400">Select Code</span>
-    )}
-    <svg
-      className={`w-4 h-4 text-zinc-400 transition-transform duration-200 ${
-        showDropdown ? "rotate-180" : ""
-      }`}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      viewBox="0 0 24 24"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-    </svg>
-  </div>
+                <div className="relative w-1/3" ref={dropdownRef} onBlur={closeDropdown}>
+                  <div
+                    onClick={toggleDropdown}
+                    className="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400 cursor-pointer flex justify-between items-center"
+                  >
+                    {formData.countryCode ? (
+                      <span>{formData.countryCode}</span>
+                    ) : (
+                      <span className="text-zinc-400">Select Code</span>
+                    )}
+                    <svg
+                      className={`w-4 h-4 text-zinc-400 transition-transform duration-200 ${
+                        showDropdown ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
 
-{showDropdown && (
-    <div className="absolute z-50 w-full bottom-full mb-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow-lg max-h-64 overflow-hidden flex flex-col">
-      {/* Search box */}
-      <div className="p-2 border-b border-neutral-700 flex-shrink-0">
-        <input
-          type="text"
-          placeholder="Search code"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-3 py-2 text-sm rounded-md bg-neutral-900 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-rose-400"
-        />
-      </div>
+                  {showDropdown && (
+                    <div className="absolute z-50 w-full bottom-full mb-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow-lg max-h-64 overflow-hidden flex flex-col">
+                      {/* Search box */}
+                      <div className="p-2 border-b border-neutral-700 flex-shrink-0">
+                        <input
+                          type="text"
+                          placeholder="Search code"
+                          value={searchTerm}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (/^[0-9+]*$/.test(value)) {
+                              setSearchTerm(value);
+                            }
+                          }}
+                          className="w-full px-3 py-2 text-sm rounded-md bg-neutral-900 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                        />
+                      </div>
 
-      {/* Options */}
-      <ul className="overflow-y-auto flex-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-        {filteredOptions.length > 0 ? (
-          filteredOptions.map((opt) => (
-            <li
-              key={opt.iso2}
-              onMouseDown={() => {
-                setFormData((prev) => ({ ...prev, countryCode: opt.dialCode }));
-                setShowDropdown(false);
-                setSearchTerm("");
-              }}
-              className="px-4 py-2 hover:bg-rose-500 hover:text-white cursor-pointer text-sm text-gray-200"
-            >
-              ({opt.dialCode})
-            </li>
-          ))
-        ) : (
-          <li className="px-4 py-2 text-gray-400 text-sm">No results found</li>
-        )}
-      </ul>
-      <style jsx>{`
-        ul::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
-    </div>
-  )}
-</div>
-
+                      {/* Options */}
+                      <ul className="overflow-y-auto flex-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                        {filteredOptions.length > 0 ? (
+                          filteredOptions.map((opt) => (
+                            <li
+                              key={opt.iso2}
+                              onMouseDown={() => {
+                                setFormData((prev) => ({ ...prev, countryCode: opt.dialCode }));
+                                closeDropdown();
+                              }}
+                              className="px-4 py-2 hover:bg-rose-500 hover:text-white cursor-pointer text-sm text-gray-200"
+                            >
+                              ({opt.dialCode})
+                            </li>
+                          ))
+                        ) : (
+                          <li className="px-4 py-2 text-gray-400 text-sm">No results found</li>
+                        )}
+                      </ul>
+                      <style jsx>{`
+                        ul::-webkit-scrollbar {
+                          display: none;
+                        }
+                      `}</style>
+                    </div>
+                  )}
+                </div>
 
                 <input
                   type="number"
