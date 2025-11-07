@@ -17,6 +17,11 @@ const Subscription = () => {
   const { authToken } = useParams<{ authToken: string }>();
 
   const token = localStorage.getItem("authToken") || authToken;
+
+    const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/");
+  };
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -25,9 +30,14 @@ const Subscription = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      if(response.status === 200){
       setActivePlanData(response.data.data);
       setPlanId(response.data.data.planId);
       setSubscriptionStatus(response.data.data.status || "");
+      }
+      else if(response.status === 401){
+        handleLogout();
+      }
     } catch (error) {
       console.error("Error fetching protected data:", error);
     }
@@ -53,7 +63,12 @@ const Subscription = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+        if(response.status === 200){
         setSubscriptionPlans(response.data.data);
+        }
+        else if (response.status === 401){
+          handleLogout()
+        }
       } catch (error) {
         console.error("Error fetching protected data:", error);
       }
@@ -130,16 +145,14 @@ const Subscription = () => {
       );
       toast.success("Your subscription has been upgraded.");
       window.location.reload();
+      
     } catch (error) {
       console.error("Error upgrading subscription:", error);
     } finally {
       setLoading(false);
     }
   };
-  const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    navigate("/");
-  };
+
 
   return (
     <>
