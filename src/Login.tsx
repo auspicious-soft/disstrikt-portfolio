@@ -7,6 +7,7 @@ import { allCountries } from "country-telephone-data";
 import { languages, countries } from "./utils/utils";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -36,18 +37,18 @@ const Login = () => {
         const planId = response.data.data.planId;
         const userType = response.data.data.userType;
         if(userType !== "web") {
-          alert("Only web users can log in here.");
+          toast.error("Only web users can log in here.");
           setLoading(false);
           return;
         }
         console.log('token:', token);
         localStorage.setItem("authToken", token);
-        alert("Logged In successfully!");
-        navigate(`/subscription?lang=${lang}&country=${country}&subscriptionStatus=${subscriptionStatus === null ? "nosubscription" : subscriptionStatus}&planId=${planId}`);
+        toast.success("Logged In successfully!");
+        navigate(`/subscription`);
       }
     } catch (err) {
       console.error("Error submitting form:", err);
-      alert(err.response?.data?.message);
+      toast.error(err.response?.data?.message);
     } finally {
       setLoading(false);
     }

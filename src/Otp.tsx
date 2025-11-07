@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import logo from "./assets/Logo (Name) 1.svg";
 import LoginImg from "./assets/pexels-nerdcinema-19306017.png";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const Otp = () => {
   const location = useLocation();
@@ -51,14 +52,14 @@ const Otp = () => {
         language: queryParams.get("lang") || "en",
       });
       if (response.status === 200) {
-        alert("Redirecting to login page...");
+        toast.success("Redirecting to login page...");
         setTimeout(()=>{
           navigate(`/`);
         }, 500);
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
-      alert(error.response?.data?.message || "OTP verification failed.");
+      toast.error(error.response?.data?.message || "OTP verification failed.");
     }finally{
       setOtp(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
@@ -73,11 +74,11 @@ const Otp = () => {
         purpose: "SIGNUP",
       });
       if (response.status === 200) {
-        alert("OTP resent successfully!");
+        toast.success("OTP resent successfully!");
       }
     } catch (error) {
       console.error("Error resending OTP:", error);
-      alert(error.response?.data?.message || "Failed to resend OTP.");
+      toast.error(error.response?.data?.message || "Failed to resend OTP.");
     }
   };
 

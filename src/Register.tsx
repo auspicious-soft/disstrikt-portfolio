@@ -7,6 +7,7 @@ import { allCountries } from "country-telephone-data";
 import { languages, countries } from "./utils/utils";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -41,7 +42,7 @@ const Register = () => {
         payload
       );
       if (response.status === 201) {
-        alert("Form submitted successfully!");
+        toast.success("Form submitted successfully!");
         const encodedEmail = encodeURIComponent(formData.email);
         navigate(
           `/verify-otp?email=${encodedEmail}&lang=${formData.language}&country=${formData.country}`
@@ -49,7 +50,7 @@ const Register = () => {
       }
     } catch (err) {
       console.error("Error submitting form:", err);
-      alert(err.response?.data?.message);
+      toast.error(err.response?.data?.message);
     } finally {
       setLoading(false);
     }

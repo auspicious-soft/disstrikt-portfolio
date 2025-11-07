@@ -1,21 +1,40 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import logo from "./assets/Logo (Name) 1.svg";
-import LoginImg from "./assets/pexels-nerdcinema-19306017.png";
-import { useLocation, useNavigate } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Subscription = () => {
   const [subscriptionPlans, setSubscriptionPlans] = useState([]);
+  const [activePlanData, setActivePlanData] = useState([]);
+  const [planId, setPlanId] = useState("");
+  const [subscriptionStatus, setSubscriptionStatus] = useState("");
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  console.log('selectedPlan:', selectedPlan);
-  const navigate = useNavigate()
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const country = queryParams.get("country");
-  const subscriptionStatus = queryParams.get("subscriptionStatus");
-  let planId = queryParams.get("planId");
-  
-  // Highlight the user’s current plan if planId exists
+  const navigate = useNavigate();
+    const { authToken } = useParams<{ authToken: string }>();
+
+  const token = localStorage.getItem("authToken") || authToken;
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.disstrikt.uk/api/user/get-active-plan",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setActivePlanData(response.data.data);
+      setPlanId(response.data.data.planId);
+      setSubscriptionStatus(response.data.data.status || "");
+    } catch (error) {
+      console.error("Error fetching protected data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.info();
   useEffect(() => {
     if (planId && subscriptionStatus !== "canceled") {
       setSelectedPlan(planId);
@@ -23,7 +42,6 @@ const Subscription = () => {
   }, [planId]);
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -48,7 +66,6 @@ const Subscription = () => {
     if (!selectedPlan) return;
 
     try {
-      const token = localStorage.getItem("authToken");
 
       const setupIntentRes = await axios.get(
         "https://api.disstrikt.uk/api/user/setup-intent",
@@ -77,66 +94,47 @@ const Subscription = () => {
 
   const handleCancel = async (type: any) => {
     try {
-      const token = localStorage.getItem("authToken");
       await axios.post(
         "https://api.disstrikt.uk/api/paid-user/update-subscription",
         { type: type },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      alert("Your subscription has been canceled.");
-      localStorage.removeItem("authToken");
-      window.location.href = "/";
+      fetchData();
+      toast.success("Your subscription has been canceled.");
     } catch (error) {
       console.error("Error canceling subscription:", error);
     }
   };
 
-  const handleUpgrade = async(type:string) => {
+  const handleUpgrade = async (type: string) => {
     try {
-      if(selectedPlan === planId){
-        alert("You are already on this plan.");
+      if (selectedPlan === planId) {
+        toast.error("You are already on this plan.");
         return;
       }
-      const token = localStorage.getItem("authToken");
       await axios.post(
         "https://api.disstrikt.uk/api/paid-user/update-subscription",
-        { type: type,
-          planId:selectedPlan
-         },
+        { type: type, planId: selectedPlan },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      alert("Your subscription has been upgraded.");
-      // now set the planId to selectedPlan in queryParams and reload
-      queryParams.set("planId", selectedPlan!);
-    const newSearch = queryParams.toString();
-    navigate(`${location.pathname}?${newSearch}`, { replace: true });
-
-    // ✅ Then reload if you really need a full reload
-    window.location.reload()
+      toast.success("Your subscription has been upgraded.");
+      window.location.reload();
     } catch (error) {
       console.error("Error upgrading subscription:", error);
     }
   };
-    const handleLogout = () => {
+  const handleLogout = () => {
     localStorage.removeItem("authToken");
-    navigate("/"); // redirect to homepage or login page
+    navigate("/");
   };
-
 
   return (
     <div className="w-full h-screen bg-neutral-900 relative overflow-hidden font-body flex justify-center items-center">
-      {/* Blurred glow background */}
       <div className="absolute w-[916px] h-[916px] left-1/2 top-[54px] -translate-x-1/2 bg-rose-200/20 blur-[250px]" />
 
       <div className="relative z-10 flex w-full max-w-6xl bg-transparent rounded-xl overflow-hidden flex-col md:flex-row-reverse h-full md:h-[650px] md:p-6 gap-x-16">
-        {/* ✅ RIGHT SIDE (kept exactly as your original) */}
         <div className="hidden md:flex flex-1 relative w-full h-full overflow-hidden rounded-xl bg-gradient-to-br from-rose-200/10 via-neutral-800 to-neutral-900 flex-col justify-center items-center p-8 gap-6">
-          {/* <img
-            src={LoginImg}
-            alt="App Preview"
-            className="w-3/4 max-w-sm rounded-2xl shadow-lg shadow-rose-400/20 object-cover"
-          /> */}
-
+        
           <div className="text-center mt-6">
             <h2 className="text-2xl font-semibold text-rose-300 mb-2">
               Get Our Mobile App
@@ -190,16 +188,16 @@ const Subscription = () => {
           className="flex-1 flex flex-col gap-5 px-6 sm:px-8 py-10 w-full h-screen overflow-y-auto scrollbar-hide"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-        <div className="w-full sticky flex justify-between items-center">
-  <img src={logo} alt="logo" className="w-28 h-16" />
-  
-  <button
-    onClick={handleLogout}
-    className="bg-white/10 hover:bg-white/20 text-rose-300 border border-rose-300/30 rounded-lg px-4 py-2 text-sm font-medium transition-all"
-  >
-    Logout
-  </button>
-</div>
+          <div className="w-full sticky flex justify-between items-center">
+            <img src={logo} alt="logo" className="w-28 h-16" />
+
+            <button
+              onClick={handleLogout}
+              className="bg-white/10 hover:bg-white/20 text-rose-300 border border-rose-300/30 rounded-lg px-4 py-2 text-sm font-medium transition-all"
+            >
+              Logout
+            </button>
+          </div>
 
           <div className="flex flex-col gap-2">
             <h1 className="text-3xl font-bold text-stone-200 mb-4">
@@ -219,32 +217,36 @@ const Subscription = () => {
                   className="bg-rose-200/10 relative backdrop-blur-sm rounded-xl p-5 border border-rose-200/20 hover:border-rose-300/40 transition-all cursor-pointer"
                   onClick={() => handlePlanSelect(plan)}
                 >
-                   {/* <div className="w-full h-full rounded-xl bg-rose-200/10"> */}
-                    {planId === plan._id && subscriptionStatus === "active" ? (
-                      <span className="absolute top-[-10px] right-[-5px] z-10 bg-rose-400 text-white text-xs font-semibold py-1 px-2 rounded">
-                        Active
-                      </span>
-                    ): subscriptionStatus === "trialing" && planId === plan._id ? ( <span className="absolute top-[-10px] right-[-5px] z-10 bg-rose-400 text-white text-xs font-semibold py-1 px-2 rounded">
-                        Trialing
-                      </span>
-                    ) : subscriptionStatus === "canceling" && planId === plan._id ? ( <span className="absolute top-[-10px] right-[-5px] z-10 bg-yellow-400 text-white text-xs font-semibold py-1 px-2 rounded">
-                        Canceling
-                      </span> ) : null}
-                    {/* </div> */}
+                  {/* <div className="w-full h-full rounded-xl bg-rose-200/10"> */}
+                  {planId === plan._id && subscriptionStatus === "active" ? (
+                    <span className="absolute top-[-10px] right-[-5px] z-10 bg-rose-400 text-white text-xs font-semibold py-1 px-2 rounded">
+                      Active
+                    </span>
+                  ) : subscriptionStatus === "trialing" &&
+                    planId === plan._id ? (
+                    <span className="absolute top-[-10px] right-[-5px] z-10 bg-rose-400 text-white text-xs font-semibold py-1 px-2 rounded">
+                      Trialing
+                    </span>
+                  ) : subscriptionStatus === "canceling" &&
+                    planId === plan._id ? (
+                    <span className="absolute top-[-10px] right-[-5px] z-10 bg-yellow-400 text-white text-xs font-semibold py-1 px-2 rounded">
+                      Canceling
+                    </span>
+                  ) : null}
+                  {/* </div> */}
                   {/* Rose ring when selected or subscribed */}
                   <div
                     className={`absolute inset-0 rounded-xl transition-all ${
                       selectedPlan === plan._id ? "ring-2 ring-rose-400" : ""
                     }`}
                   />
-                  
+
                   <div className="flex relative justify-between items-start mb-3">
-                   
                     <h3 className="text-rose-400 font-bold text-lg">
                       {plan.name}
                     </h3>
                     <span className="text-stone-200 font-semibold">
-                      {country?.toLowerCase() === "uk"
+                      {activePlanData.country?.toLowerCase() === "uk"
                         ? `£${plan.gbpAmount}`
                         : `€${plan.eurAmount}`}
                     </span>
@@ -351,7 +353,7 @@ const Subscription = () => {
                 className={`w-full bg-rose-400/80 hover:bg-rose-300 text-neutral-900 font-semibold py-3 px-4 rounded-lg transition-all ${
                   !selectedPlan ? "opacity-50 cursor-not-allowed" : ""
                 }`}
-                >
+              >
                 Buy Plan Now
               </button>
             )}
