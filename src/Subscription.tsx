@@ -5,14 +5,29 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import Loader from "./utils/Loader";
 
-const Subscription = () => {
-  const [subscriptionPlans, setSubscriptionPlans] = useState([]);
-  const [activePlanData, setActivePlanData] = useState([]);
-  const [planId, setPlanId] = useState("");
-  const [subscriptionStatus, setSubscriptionStatus] = useState("");
-  const [loading, setLoading] = useState(false);
+interface Plan {
+  _id: string;
+  name: string;
+  description: string;
+  gbpAmount: number;
+  eurAmount: number;
+  features: string[];
+}
 
+interface ActivePlanData {
+  planId?: string;
+  status?: string;
+  country?: string;
+}
+
+const Subscription = () => {
+  const [subscriptionPlans, setSubscriptionPlans] = useState<Plan[]>([]);
+  const [activePlanData, setActivePlanData] = useState<ActivePlanData>({});
+  const [planId, setPlanId] = useState<string>("");
+  const [subscriptionStatus, setSubscriptionStatus] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+
   const navigate = useNavigate();
   const { authToken } = useParams<{ authToken: string }>();
 
@@ -33,12 +48,12 @@ const Subscription = () => {
       );
       if (response.status === 200) {
         setActivePlanData(response.data.data);
-        setPlanId(response.data.data.planId);
+        setPlanId(response.data.data.planId || "");
         setSubscriptionStatus(response.data.data.status || "");
       }
     } catch (error) {
       console.error("Error fetching protected data:", error);
-      if (error?.response?.status === 401) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
         handleLogout();
       }
     }
@@ -48,7 +63,6 @@ const Subscription = () => {
     fetchData();
   }, [fetchData]);
 
-  console.info();
   useEffect(() => {
     if (planId && subscriptionStatus !== "canceled") {
       setSelectedPlan(planId);
@@ -68,7 +82,7 @@ const Subscription = () => {
       }
     } catch (error) {
       console.error("Error fetching protected data:", error);
-      if (error?.response?.status === 401) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
         handleLogout();
       }
     }
@@ -78,7 +92,7 @@ const Subscription = () => {
     fetchPlans();
   }, [fetchPlans]);
 
-  const handlePlanSelect = (plan: any) => {
+  const handlePlanSelect = (plan: Plan) => {
     setSelectedPlan(plan._id);
   };
 
@@ -106,18 +120,21 @@ const Subscription = () => {
         window.location.href = checkoutUrl;
       } else {
         console.error("No checkout URL returned from API");
+        toast.error("Failed to start trial. Please try again.");
       }
     } catch (error) {
       console.error("Error starting trial:", error);
-      if (error?.response?.status === 401) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
         handleLogout();
+      } else {
+        toast.error("Failed to start trial. Please try again.");
       }
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCancel = async (type: any) => {
+  const handleCancel = async (type: string) => {
     setLoading(true);
 
     try {
@@ -130,39 +147,15 @@ const Subscription = () => {
       toast.success("Your subscription has been canceled.");
     } catch (error) {
       console.error("Error canceling subscription:", error);
-      if (error?.response?.status === 401) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
         handleLogout();
+      } else {
+        toast.error("Failed to cancel subscription. Please try again.");
       }
     } finally {
       setLoading(false);
     }
   };
-
-  // const handleUpgrade = async (type: string) => {
-  //   setLoading(true);
-
-  //   try {
-  //     if (selectedPlan === planId) {
-  //       toast.error("You are already on this plan.");
-  //       return;
-  //     }
-  //     await axios.post(
-  //       "https://api.disstrikt.uk/api/paid-user/update-subscription",
-  //       { type: type, planId: selectedPlan },
-  //       { headers: { Authorization: `Bearer ${token}` } }
-  //     );
-  //     toast.success("Your subscription has been upgraded.");
-  //     window.location.reload();
-
-  //   } catch (error) {
-  //     console.error("Error upgrading subscription:", error);
-  //      if (error?.response?.status === 401) {
-  //     handleLogout();
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   return (
     <>
@@ -230,7 +223,7 @@ const Subscription = () => {
             </div>
           </div>
 
-          {/* Plans Section - Now takes more width */}
+          {/* Plans Section */}
           <div
             className="w-full lg:w-3/5 flex flex-col gap-5 px-6 sm:px-8 py-10 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto scrollbar-hide"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
@@ -341,43 +334,21 @@ const Subscription = () => {
             {/* Dynamic Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mt-6">
               {subscriptionStatus === "trialing" && (
-                <>
-                  <button
-                    onClick={() => handleCancel("cancelTrial")}
-                    className="flex-1 bg-red-500/80 hover:bg-red-400 text-white font-semibold py-3 px-4 rounded-lg transition-all"
-                  >
-                    Start Plan Now
-                  </button>
-                  {/* {selectedPlan !== planId && (
-                    <button
-                      onClick={() => handleUpgrade("upgrade")}
-                      className="flex-1 bg-rose-400/80 hover:bg-rose-300 text-neutral-900 font-semibold py-3 px-4 rounded-lg transition-all"
-                    >
-                      Upgrade Plan
-                    </button>
-                  )} */}
-                </>
+                <button
+                  onClick={() => handleCancel("cancelTrial")}
+                  className="flex-1 bg-red-500/80 hover:bg-red-400 text-white font-semibold py-3 px-4 rounded-lg transition-all"
+                >
+                  Start Plan Now
+                </button>
               )}
 
-              {subscriptionStatus === "active" && (
-                <>
-                  {planId === selectedPlan && (
-                    <button
-                      onClick={() => handleCancel("cancelSubscription")}
-                      className="flex-1 bg-red-500/80 hover:bg-red-400 text-white font-semibold py-3 px-4 rounded-lg transition-all"
-                    >
-                      Cancel Subscription
-                    </button>
-                  )}
-                  {/* {selectedPlan !== planId && (
-                    <button
-                      onClick={() => handleUpgrade("upgrade")}
-                      className="flex-1 bg-rose-400/80 hover:bg-rose-300 text-neutral-900 font-semibold py-3 px-4 rounded-lg transition-all"
-                    >
-                      Upgrade Plan
-                    </button>
-                  )} */}
-                </>
+              {subscriptionStatus === "active" && planId === selectedPlan && (
+                <button
+                  onClick={() => handleCancel("cancelSubscription")}
+                  className="flex-1 bg-red-500/80 hover:bg-red-400 text-white font-semibold py-3 px-4 rounded-lg transition-all"
+                >
+                  Cancel Subscription
+                </button>
               )}
 
               {!subscriptionStatus && (
@@ -391,6 +362,7 @@ const Subscription = () => {
                   Start With 14 Days Free Trial
                 </button>
               )}
+
               {subscriptionStatus === "canceling" && (
                 <button
                   disabled={true}
@@ -400,6 +372,7 @@ const Subscription = () => {
                   Cancellation in Process
                 </button>
               )}
+
               {subscriptionStatus === "canceled" && (
                 <button
                   disabled={!selectedPlan}

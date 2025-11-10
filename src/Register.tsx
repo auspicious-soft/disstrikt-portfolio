@@ -59,11 +59,7 @@ const Register = () => {
   const validatePassword = (password) => {
     const lengthValid = password.length > 6;
     const upperValid = /[A-Z]/.test(password);
-    // Use an explicit character set check to avoid noisy escape issues in the linter
-    const specialChars = `!@#$%^&*()_+-=[]{};':"\\|,.<>/?`;
-    const specialValid = specialChars
-      .split("")
-      .some((ch) => password.includes(ch));
+    const specialValid = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
     return lengthValid && upperValid && specialValid;
   };
 
@@ -78,9 +74,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isPasswordValid) {
-      toast.error(
-        "Password must be at least 8 characters long, contain one uppercase letter, and one special character."
-      );
+      toast.error("Password must be at least 8 characters long, contain one uppercase letter, and one special character.");
       return;
     }
     setLoading(true);
@@ -280,23 +274,19 @@ const Register = () => {
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </div>
                 </div>
-                {formData.password && !isPasswordValid && (
-                  <p className="mt-2 text-sm text-red-400">
-                    Password must be at least 8 characters long, contain one
-                    uppercase letter, and one special character.
-                  </p>
-                )}
+             {formData.password && !isPasswordValid && (
+  <p className="mt-2 text-sm text-red-400">
+    Password must be at least 8 characters long, contain one uppercase letter, and one special character.
+  </p>
+)}
 
-                {formData.password && isPasswordValid && (
-                  <p className="mt-2 text-sm text-green-400">Strong password</p>
-                )}
+{formData.password && isPasswordValid && (
+  <p className="mt-2 text-sm text-green-400">Strong password</p>
+)}
+
               </>,
               <div className="flex gap-1">
-                <div
-                  className="relative w-1/3"
-                  ref={dropdownRef}
-                  onBlur={closeDropdown}
-                >
+                <div className="relative w-1/3" ref={dropdownRef} onBlur={closeDropdown}>
                   <div
                     onClick={toggleDropdown}
                     className="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-rose-400 cursor-pointer flex justify-between items-center"
@@ -315,11 +305,7 @@ const Register = () => {
                       strokeWidth="2"
                       viewBox="0 0 24 24"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19 9l-7 7-7-7"
-                      />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
 
@@ -342,22 +328,13 @@ const Register = () => {
                       </div>
 
                       {/* Options */}
-                      <ul
-                        className="overflow-y-auto flex-1"
-                        style={{
-                          scrollbarWidth: "none",
-                          msOverflowStyle: "none",
-                        }}
-                      >
+                      <ul className="overflow-y-auto flex-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                         {filteredOptions.length > 0 ? (
                           filteredOptions.map((opt) => (
                             <li
                               key={opt.iso2}
                               onMouseDown={() => {
-                                setFormData((prev) => ({
-                                  ...prev,
-                                  countryCode: opt.dialCode,
-                                }));
+                                setFormData((prev) => ({ ...prev, countryCode: opt.dialCode }));
                                 closeDropdown();
                               }}
                               className="px-4 py-2 hover:bg-rose-500 hover:text-white cursor-pointer text-sm text-gray-200"
@@ -366,9 +343,7 @@ const Register = () => {
                             </li>
                           ))
                         ) : (
-                          <li className="px-4 py-2 text-gray-400 text-sm">
-                            No results found
-                          </li>
+                          <li className="px-4 py-2 text-gray-400 text-sm">No results found</li>
                         )}
                       </ul>
                       <style jsx>{`
