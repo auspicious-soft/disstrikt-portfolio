@@ -40,7 +40,7 @@ const ImagesTab: React.FC<ImagesTabProps> = ({ images }) => {
           >
             <img
               src={`https://disstrikt.s3.eu-north-1.amazonaws.com/${img}`}
-              alt={`Image ${idx}`}
+              alt="Disstrikt"
               className="w-full rounded-[10px] object-cover"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "/assets/fallback-image.jpg";
@@ -86,7 +86,7 @@ const ImagesTab: React.FC<ImagesTabProps> = ({ images }) => {
               </button>
               <img
                 src={`https://disstrikt.s3.eu-north-1.amazonaws.com/${selectedImage}`}
-                alt="Selected image"
+                alt="Registration background"
                 className="w-full h-auto max-h-[80vh] object-contain rounded-[10px]"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "/assets/fallback-image.jpg";

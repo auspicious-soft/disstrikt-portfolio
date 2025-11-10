@@ -59,7 +59,7 @@ const Register = () => {
   const validatePassword = (password) => {
     const lengthValid = password.length > 6;
     const upperValid = /[A-Z]/.test(password);
-    const specialValid = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+    const specialValid = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
     return lengthValid && upperValid && specialValid;
   };
 
@@ -198,7 +198,7 @@ const Register = () => {
         >
           <img
             src={LoginImg}
-            alt="Illustration"
+            alt="Registration background"
             className="object-contain w-full h-full rounded-xl"
           />
         </motion.div>
@@ -212,7 +212,7 @@ const Register = () => {
             initial="hidden"
             animate="visible"
           >
-            <img src={logo} alt="logo" className="w-28 h-16 transition-all" />
+            <img src={logo} alt="Disstrikt logo" className="w-28 h-16 transition-all" />
           </motion.div>
 
           {/* Heading */}
@@ -274,16 +274,15 @@ const Register = () => {
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </div>
                 </div>
-             {formData.password && !isPasswordValid && (
-  <p className="mt-2 text-sm text-red-400">
-    Password must be at least 8 characters long, contain one uppercase letter, and one special character.
-  </p>
-)}
+                {formData.password && !isPasswordValid && (
+                  <p className="mt-2 text-sm text-red-400">
+                    Password must be at least 8 characters long, contain one uppercase letter, and one special character.
+                  </p>
+                )}
 
-{formData.password && isPasswordValid && (
-  <p className="mt-2 text-sm text-green-400">Strong password</p>
-)}
-
+                {formData.password && isPasswordValid && (
+                  <p className="mt-2 text-sm text-green-400">Strong password</p>
+                )}
               </>,
               <div className="flex gap-1">
                 <div className="relative w-1/3" ref={dropdownRef} onBlur={closeDropdown}>

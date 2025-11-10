@@ -3,8 +3,6 @@ import { Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion"; 
 import logo from "./assets/Logo (Name) 1.svg";
 import LoginImg from "./assets/pexels-nerdcinema-19306017.png";
-import { allCountries } from "country-telephone-data";
-import { languages, countries } from "./utils/utils";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -32,10 +30,6 @@ const Login = () => {
       const response = await axios.post("https://api.disstrikt.uk/api/login", payload);
       if (response.status === 200) {
         const token = response.data.data.token;
-        const lang = response.data.data.language;
-        const country = response.data.data.country;
-        const subscriptionStatus = response.data.data.subscription;
-        const planId = response.data.data.planId;
         const userType = response.data.data.userType;
         if(userType !== "web") {
           toast.error("Only web users can log in here.");
