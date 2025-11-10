@@ -30,6 +30,7 @@ const Subscription = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      console.log('response:', response);
       if(response.status === 200){
       setActivePlanData(response.data.data);
       setPlanId(response.data.data.planId);
@@ -40,6 +41,9 @@ const Subscription = () => {
       }
     } catch (error) {
       console.error("Error fetching protected data:", error);
+       if (error?.response?.status === 401) {
+      handleLogout();
+      }
     }
   };
 
@@ -65,12 +69,14 @@ const Subscription = () => {
         );
         if(response.status === 200){
         setSubscriptionPlans(response.data.data);
-        }
-        else if (response.status === 401){
+        }else if (response.status === 401){
           handleLogout()
         }
       } catch (error) {
         console.error("Error fetching protected data:", error);
+         if (error?.response?.status === 401) {
+      handleLogout();
+    }
       }
     };
     fetchData();
@@ -107,6 +113,9 @@ const Subscription = () => {
       }
     } catch (error) {
       console.error("Error starting trial:", error);
+      if (error?.response?.status === 401) {
+      handleLogout();
+      }
     } finally {
       setLoading(false);
     }
@@ -125,6 +134,9 @@ const Subscription = () => {
       toast.success("Your subscription has been canceled.");
     } catch (error) {
       console.error("Error canceling subscription:", error);
+       if (error?.response?.status === 401) {
+      handleLogout();
+      }
     } finally {
       setLoading(false);
     }
@@ -148,6 +160,9 @@ const Subscription = () => {
       
     } catch (error) {
       console.error("Error upgrading subscription:", error);
+       if (error?.response?.status === 401) {
+      handleLogout();
+      }
     } finally {
       setLoading(false);
     }
@@ -328,33 +343,33 @@ const Subscription = () => {
                   >
                     Start Plan Now
                   </button>
-                  {selectedPlan !== planId && (
+                  {/* {selectedPlan !== planId && (
                     <button
                       onClick={() => handleUpgrade("upgrade")}
                       className="flex-1 bg-rose-400/80 hover:bg-rose-300 text-neutral-900 font-semibold py-3 px-4 rounded-lg transition-all"
                     >
                       Upgrade Plan
                     </button>
-                  )}
+                  )} */}
                 </>
               )}
 
               {subscriptionStatus === "active" && (
                 <>
-                  <button
+                 {planId === selectedPlan && <button
                     onClick={() => handleCancel("cancelSubscription")}
                     className="flex-1 bg-red-500/80 hover:bg-red-400 text-white font-semibold py-3 px-4 rounded-lg transition-all"
                   >
                     Cancel Subscription
-                  </button>
-                  {selectedPlan !== planId && (
+                  </button>}
+                  {/* {selectedPlan !== planId && (
                     <button
                       onClick={() => handleUpgrade("upgrade")}
                       className="flex-1 bg-rose-400/80 hover:bg-rose-300 text-neutral-900 font-semibold py-3 px-4 rounded-lg transition-all"
                     >
                       Upgrade Plan
                     </button>
-                  )}
+                  )} */}
                 </>
               )}
 
