@@ -142,31 +142,31 @@ const Subscription = () => {
     }
   };
 
-  const handleUpgrade = async (type: string) => {
-    setLoading(true);
+  // const handleUpgrade = async (type: string) => {
+  //   setLoading(true);
 
-    try {
-      if (selectedPlan === planId) {
-        toast.error("You are already on this plan.");
-        return;
-      }
-      await axios.post(
-        "https://api.disstrikt.uk/api/paid-user/update-subscription",
-        { type: type, planId: selectedPlan },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success("Your subscription has been upgraded.");
-      window.location.reload();
+  //   try {
+  //     if (selectedPlan === planId) {
+  //       toast.error("You are already on this plan.");
+  //       return;
+  //     }
+  //     await axios.post(
+  //       "https://api.disstrikt.uk/api/paid-user/update-subscription",
+  //       { type: type, planId: selectedPlan },
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
+  //     toast.success("Your subscription has been upgraded.");
+  //     window.location.reload();
       
-    } catch (error) {
-      console.error("Error upgrading subscription:", error);
-       if (error?.response?.status === 401) {
-      handleLogout();
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error upgrading subscription:", error);
+  //      if (error?.response?.status === 401) {
+  //     handleLogout();
+  //     }
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
 
   return (
