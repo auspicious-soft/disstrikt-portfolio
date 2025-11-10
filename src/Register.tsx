@@ -54,7 +54,7 @@ const Register = () => {
   const validatePassword = (password) => {
     const lengthValid = password.length >= 8;
     const upperValid = /[A-Z]/.test(password);
-    const specialValid = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+    const specialValid = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
     return lengthValid && upperValid && specialValid;
   };
 
