@@ -1,5 +1,5 @@
-import React from 'react';
-import { Instagram, Youtube } from 'lucide-react';
+import React from "react";
+import { Instagram, Youtube } from "lucide-react";
 
 interface OtherDetailsTabProps {
   instagramLink: string;
@@ -7,16 +7,24 @@ interface OtherDetailsTabProps {
   profileImage: string;
 }
 
-const OtherDetailsTab: React.FC<OtherDetailsTabProps> = ({ instagramLink, youtubeLink, profileImage }) => {
+const OtherDetailsTab: React.FC<OtherDetailsTabProps> = ({
+  instagramLink,
+  youtubeLink,
+  profileImage,
+}) => {
   const handleLinkClick = (url: string) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
-const renderImg = profileImage ? `https://disstrikt.s3.eu-north-1.amazonaws.com/${profileImage}`: '';
+  // profileImage is used directly in the img src below; previous intermediate variable was unused
 
   return (
     <div className="w-full flex flex-col sm:flex-row justify-start items-start gap-5">
-      <div className={`flex-1 inline-flex flex-col justify-start items-start gap-1.5 w-full ${profileImage ? "w-full" : "sm:w-1/2"}`}>
+      <div
+        className={`flex-1 inline-flex flex-col justify-start items-start gap-1.5 w-full ${
+          profileImage ? "w-full" : "sm:w-1/2"
+        }`}
+      >
         <div className="self-stretch justify-start text-stone-200 text-xm font-extrabold font-['Minork_Sans_']">
           View Profile On
         </div>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import logo from "./assets/Logo (Name) 1.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -18,11 +18,12 @@ const Subscription = () => {
 
   const token = localStorage.getItem("authToken") || authToken;
 
-    const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     localStorage.removeItem("authToken");
     navigate("/");
-  };
-  const fetchData = async () => {
+  }, [navigate]);
+
+  const fetchData = useCallback(async () => {
     try {
       const response = await axios.get(
         "https://api.disstrikt.uk/api/user/get-active-plan",
@@ -30,57 +31,52 @@ const Subscription = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log('response:', response);
-      if(response.status === 200){
-      setActivePlanData(response.data.data);
-      setPlanId(response.data.data.planId);
-      setSubscriptionStatus(response.data.data.status || "");
-      }
-      else if(response.status === 401){
-        handleLogout();
+      if (response.status === 200) {
+        setActivePlanData(response.data.data);
+        setPlanId(response.data.data.planId);
+        setSubscriptionStatus(response.data.data.status || "");
       }
     } catch (error) {
       console.error("Error fetching protected data:", error);
-       if (error?.response?.status === 401) {
-      handleLogout();
+      if (error?.response?.status === 401) {
+        handleLogout();
       }
     }
-  };
+  }, [token, handleLogout]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   console.info();
   useEffect(() => {
     if (planId && subscriptionStatus !== "canceled") {
       setSelectedPlan(planId);
     }
-  }, [planId]);
+  }, [planId, subscriptionStatus]);
+
+  const fetchPlans = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        "https://api.disstrikt.uk/api/user/plans",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.status === 200) {
+        setSubscriptionPlans(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching protected data:", error);
+      if (error?.response?.status === 401) {
+        handleLogout();
+      }
+    }
+  }, [token, handleLogout]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://api.disstrikt.uk/api/user/plans",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        if(response.status === 200){
-        setSubscriptionPlans(response.data.data);
-        }else if (response.status === 401){
-          handleLogout()
-        }
-      } catch (error) {
-        console.error("Error fetching protected data:", error);
-         if (error?.response?.status === 401) {
-      handleLogout();
-    }
-      }
-    };
-    fetchData();
-  }, []);
+    fetchPlans();
+  }, [fetchPlans]);
 
   const handlePlanSelect = (plan: any) => {
     setSelectedPlan(plan._id);
@@ -114,7 +110,7 @@ const Subscription = () => {
     } catch (error) {
       console.error("Error starting trial:", error);
       if (error?.response?.status === 401) {
-      handleLogout();
+        handleLogout();
       }
     } finally {
       setLoading(false);
@@ -134,8 +130,8 @@ const Subscription = () => {
       toast.success("Your subscription has been canceled.");
     } catch (error) {
       console.error("Error canceling subscription:", error);
-       if (error?.response?.status === 401) {
-      handleLogout();
+      if (error?.response?.status === 401) {
+        handleLogout();
       }
     } finally {
       setLoading(false);
@@ -157,7 +153,7 @@ const Subscription = () => {
   //     );
   //     toast.success("Your subscription has been upgraded.");
   //     window.location.reload();
-      
+
   //   } catch (error) {
   //     console.error("Error upgrading subscription:", error);
   //      if (error?.response?.status === 401) {
@@ -167,7 +163,6 @@ const Subscription = () => {
   //     setLoading(false);
   //   }
   // };
-
 
   return (
     <>
@@ -187,10 +182,15 @@ const Subscription = () => {
             </div>
 
             <div className="flex gap-4 mt-4">
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() =>
+                  window.open(
+                    "https://apps.apple.com",
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                }
                 className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-rose-300/30 rounded-lg px-4 py-2 transition-all"
               >
                 <svg
@@ -203,12 +203,17 @@ const Subscription = () => {
                 <span className="text-sm text-zinc-200 font-medium">
                   App Store
                 </span>
-              </a>
+              </button>
 
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() =>
+                  window.open(
+                    "https://play.google.com/store",
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                }
                 className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-rose-300/30 rounded-lg px-4 py-2 transition-all"
               >
                 <svg
@@ -221,7 +226,7 @@ const Subscription = () => {
                 <span className="text-sm text-zinc-200 font-medium">
                   Google Play
                 </span>
-              </a>
+              </button>
             </div>
           </div>
 
@@ -356,12 +361,14 @@ const Subscription = () => {
 
               {subscriptionStatus === "active" && (
                 <>
-                 {planId === selectedPlan && <button
-                    onClick={() => handleCancel("cancelSubscription")}
-                    className="flex-1 bg-red-500/80 hover:bg-red-400 text-white font-semibold py-3 px-4 rounded-lg transition-all"
-                  >
-                    Cancel Subscription
-                  </button>}
+                  {planId === selectedPlan && (
+                    <button
+                      onClick={() => handleCancel("cancelSubscription")}
+                      className="flex-1 bg-red-500/80 hover:bg-red-400 text-white font-semibold py-3 px-4 rounded-lg transition-all"
+                    >
+                      Cancel Subscription
+                    </button>
+                  )}
                   {/* {selectedPlan !== planId && (
                     <button
                       onClick={() => handleUpgrade("upgrade")}
